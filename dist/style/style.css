@@ -1,0 +1,40 @@
+/** {
+  border: 1px solid red;
+}
+*/
+.site-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-content: flex-end;
+  padding: 0 12px;
+  background: #f15a5f;
+  height: 80px;
+}
+
+.site-header-heading {
+  margin: 0
+  display: flex;
+  align-self: center;
+  color: #f7f7f7;
+}
+
+.site-header-center {
+  display: flex;
+  align-self: center;
+}
+
+.home {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  align-content: center;
+  height: 100vh;
+}
+
+.sitename {
+  font-family: 'Berkshire Swash', cursive;
+  font-size: 4.5em;
+  color: #f15a5f;
+}
