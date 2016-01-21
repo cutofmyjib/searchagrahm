@@ -54,7 +54,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "2066b10e3d6022ca019f"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "cfce95f3335284318a01"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -33293,9 +33293,11 @@
 	
 	var _reactDom = __webpack_require__(243);
 	
-	var _reactRefetch = __webpack_require__(309);
+	var _reqwest = __webpack_require__(309);
 	
-	var _user = __webpack_require__(318);
+	var _reqwest2 = _interopRequireDefault(_reqwest);
+	
+	var _user = __webpack_require__(311);
 	
 	var _user2 = _interopRequireDefault(_user);
 	
@@ -33310,37 +33312,67 @@
 	var Users = function (_Component) {
 	  _inherits(Users, _Component);
 	
-	  function Users() {
+	  function Users(props) {
 	    _classCallCheck(this, Users);
 	
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Users).apply(this, arguments));
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Users).call(this, props));
+	
+	    _this.state = { type: 'start' };
+	    return _this;
 	  }
 	
 	  _createClass(Users, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      var _this2 = this;
+	
+	      this.setState({ type: 'loading' });
+	
+	      (0, _reqwest2.default)({
+	        url: 'https://api.instagram.com/v1/users/search?q=danakustika&access_token=337924724.c2da448.945bb99df5c44b4e9ef5b69d6e0859ee',
+	        type: 'jsonp',
+	        method: 'get'
+	      }).then(function (response) {
+	        return _this2.setState({ type: 'success', response: response });
+	      }).fail(function (err) {
+	        return _this2.setState({ type: 'error' });
+	      });
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var usersData = [{
-	        imgSrc: "http://thefuturists.ca/wp-content/uploads/2010/10/DieAntwoordPoster1.jpg",
-	        userName: "Die_Antwoord",
-	        firstName: "Dee",
-	        lastName: "Antwoord"
-	      }, {
-	        imgSrc: "https://s-media-cache-ak0.pinimg.com/736x/68/99/97/689997e5bcce1ac339738232f87a8855.jpg",
-	        userName: "Grimez_Antwoord",
-	        firstName: "Actually",
-	        lastName: "Grimes"
-	      }];
+	      // var usersData = [
+	      //   {
+	      //     imgSrc: "http://thefuturists.ca/wp-content/uploads/2010/10/DieAntwoordPoster1.jpg",
+	      //     userName: "Die_Antwoord",
+	      //     firstName: "Dee",
+	      //     lastName: "Antwoord"
+	      //   },
+	      //   {
+	      //     imgSrc: "https://s-media-cache-ak0.pinimg.com/736x/68/99/97/689997e5bcce1ac339738232f87a8855.jpg",
+	      //     userName: "Grimez_Antwoord",
+	      //     firstName: "Actually",
+	      //     lastName: "Grimes"
+	      //   }
+	      //   ];
+	      var userCards = [];
+	      if (this.state.type === 'success') {
+	        userCards = this.state.response.data.map(function (data) {
+	          return _react2.default.createElement(_user2.default, data);
+	        });
+	      }
 	
-	      var userCards = usersData.map(function (data) {
-	        return _react2.default.createElement(_user2.default, data);
-	      });
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'results-body' },
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'ui link cards' },
-	          userCards
+	          _react2.default.createElement(
+	            'span',
+	            null,
+	            this.state.type
+	          )
 	        )
 	      );
 	    }
@@ -33348,13 +33380,9 @@
 	
 	  return Users;
 	}(_react.Component);
-	
-	exports.default = (0, _reactRefetch.connect)(function (props) {
-	  return {
-	    usersFetch: '/users/' + props.userId
-	  };
-	})(Profile);
-	
+
+	exports.default = Users;
+
 	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(304); if (makeExportsHot(module, __webpack_require__(139))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "users.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)(module)))
 
@@ -33362,1060 +33390,646 @@
 /* 309 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	  * Reqwest! A general purpose XHR connection manager
+	  * license MIT (c) Dustin Diaz 2015
+	  * https://github.com/ded/reqwest
+	  */
 	
-	exports.__esModule = true;
+	!function (name, context, definition) {
+	  if (typeof module != 'undefined' && module.exports) module.exports = definition()
+	  else if (true) !(__WEBPACK_AMD_DEFINE_FACTORY__ = (definition), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__))
+	  else context[name] = definition()
+	}('reqwest', this, function () {
 	
-	function _interopRequire(obj) { return obj && obj.__esModule ? obj['default'] : obj; }
+	  var context = this
 	
-	var _componentsConnect = __webpack_require__(310);
+	  if ('window' in context) {
+	    var doc = document
+	      , byTag = 'getElementsByTagName'
+	      , head = doc[byTag]('head')[0]
+	  } else {
+	    var XHR2
+	    try {
+	      XHR2 = __webpack_require__(310)
+	    } catch (ex) {
+	      throw new Error('Peer dependency `xhr2` required! Please npm install xhr2')
+	    }
+	  }
 	
-	exports.connect = _interopRequire(_componentsConnect);
 	
-	var _PromiseState = __webpack_require__(316);
+	  var httpsRe = /^http/
+	    , protocolRe = /(^\w+):\/\//
+	    , twoHundo = /^(20\d|1223)$/ //http://stackoverflow.com/questions/10046972/msie-returns-status-code-of-1223-for-ajax-request
+	    , readyState = 'readyState'
+	    , contentType = 'Content-Type'
+	    , requestedWith = 'X-Requested-With'
+	    , uniqid = 0
+	    , callbackPrefix = 'reqwest_' + (+new Date())
+	    , lastValue // data stored by the most recent JSONP callback
+	    , xmlHttpRequest = 'XMLHttpRequest'
+	    , xDomainRequest = 'XDomainRequest'
+	    , noop = function () {}
 	
-	exports.PromiseState = _interopRequire(_PromiseState);
+	    , isArray = typeof Array.isArray == 'function'
+	        ? Array.isArray
+	        : function (a) {
+	            return a instanceof Array
+	          }
+	
+	    , defaultHeaders = {
+	          'contentType': 'application/x-www-form-urlencoded'
+	        , 'requestedWith': xmlHttpRequest
+	        , 'accept': {
+	              '*':  'text/javascript, text/html, application/xml, text/xml, */*'
+	            , 'xml':  'application/xml, text/xml'
+	            , 'html': 'text/html'
+	            , 'text': 'text/plain'
+	            , 'json': 'application/json, text/javascript'
+	            , 'js':   'application/javascript, text/javascript'
+	          }
+	      }
+	
+	    , xhr = function(o) {
+	        // is it x-domain
+	        if (o['crossOrigin'] === true) {
+	          var xhr = context[xmlHttpRequest] ? new XMLHttpRequest() : null
+	          if (xhr && 'withCredentials' in xhr) {
+	            return xhr
+	          } else if (context[xDomainRequest]) {
+	            return new XDomainRequest()
+	          } else {
+	            throw new Error('Browser does not support cross-origin requests')
+	          }
+	        } else if (context[xmlHttpRequest]) {
+	          return new XMLHttpRequest()
+	        } else if (XHR2) {
+	          return new XHR2()
+	        } else {
+	          return new ActiveXObject('Microsoft.XMLHTTP')
+	        }
+	      }
+	    , globalSetupOptions = {
+	        dataFilter: function (data) {
+	          return data
+	        }
+	      }
+	
+	  function succeed(r) {
+	    var protocol = protocolRe.exec(r.url)
+	    protocol = (protocol && protocol[1]) || context.location.protocol
+	    return httpsRe.test(protocol) ? twoHundo.test(r.request.status) : !!r.request.response
+	  }
+	
+	  function handleReadyState(r, success, error) {
+	    return function () {
+	      // use _aborted to mitigate against IE err c00c023f
+	      // (can't read props on aborted request objects)
+	      if (r._aborted) return error(r.request)
+	      if (r._timedOut) return error(r.request, 'Request is aborted: timeout')
+	      if (r.request && r.request[readyState] == 4) {
+	        r.request.onreadystatechange = noop
+	        if (succeed(r)) success(r.request)
+	        else
+	          error(r.request)
+	      }
+	    }
+	  }
+	
+	  function setHeaders(http, o) {
+	    var headers = o['headers'] || {}
+	      , h
+	
+	    headers['Accept'] = headers['Accept']
+	      || defaultHeaders['accept'][o['type']]
+	      || defaultHeaders['accept']['*']
+	
+	    var isAFormData = typeof FormData !== 'undefined' && (o['data'] instanceof FormData);
+	    // breaks cross-origin requests with legacy browsers
+	    if (!o['crossOrigin'] && !headers[requestedWith]) headers[requestedWith] = defaultHeaders['requestedWith']
+	    if (!headers[contentType] && !isAFormData) headers[contentType] = o['contentType'] || defaultHeaders['contentType']
+	    for (h in headers)
+	      headers.hasOwnProperty(h) && 'setRequestHeader' in http && http.setRequestHeader(h, headers[h])
+	  }
+	
+	  function setCredentials(http, o) {
+	    if (typeof o['withCredentials'] !== 'undefined' && typeof http.withCredentials !== 'undefined') {
+	      http.withCredentials = !!o['withCredentials']
+	    }
+	  }
+	
+	  function generalCallback(data) {
+	    lastValue = data
+	  }
+	
+	  function urlappend (url, s) {
+	    return url + (/\?/.test(url) ? '&' : '?') + s
+	  }
+	
+	  function handleJsonp(o, fn, err, url) {
+	    var reqId = uniqid++
+	      , cbkey = o['jsonpCallback'] || 'callback' // the 'callback' key
+	      , cbval = o['jsonpCallbackName'] || reqwest.getcallbackPrefix(reqId)
+	      , cbreg = new RegExp('((^|\\?|&)' + cbkey + ')=([^&]+)')
+	      , match = url.match(cbreg)
+	      , script = doc.createElement('script')
+	      , loaded = 0
+	      , isIE10 = navigator.userAgent.indexOf('MSIE 10.0') !== -1
+	
+	    if (match) {
+	      if (match[3] === '?') {
+	        url = url.replace(cbreg, '$1=' + cbval) // wildcard callback func name
+	      } else {
+	        cbval = match[3] // provided callback func name
+	      }
+	    } else {
+	      url = urlappend(url, cbkey + '=' + cbval) // no callback details, add 'em
+	    }
+	
+	    context[cbval] = generalCallback
+	
+	    script.type = 'text/javascript'
+	    script.src = url
+	    script.async = true
+	    if (typeof script.onreadystatechange !== 'undefined' && !isIE10) {
+	      // need this for IE due to out-of-order onreadystatechange(), binding script
+	      // execution to an event listener gives us control over when the script
+	      // is executed. See http://jaubourg.net/2010/07/loading-script-as-onclick-handler-of.html
+	      script.htmlFor = script.id = '_reqwest_' + reqId
+	    }
+	
+	    script.onload = script.onreadystatechange = function () {
+	      if ((script[readyState] && script[readyState] !== 'complete' && script[readyState] !== 'loaded') || loaded) {
+	        return false
+	      }
+	      script.onload = script.onreadystatechange = null
+	      script.onclick && script.onclick()
+	      // Call the user callback with the last value stored and clean up values and scripts.
+	      fn(lastValue)
+	      lastValue = undefined
+	      head.removeChild(script)
+	      loaded = 1
+	    }
+	
+	    // Add the script to the DOM head
+	    head.appendChild(script)
+	
+	    // Enable JSONP timeout
+	    return {
+	      abort: function () {
+	        script.onload = script.onreadystatechange = null
+	        err({}, 'Request is aborted: timeout', {})
+	        lastValue = undefined
+	        head.removeChild(script)
+	        loaded = 1
+	      }
+	    }
+	  }
+	
+	  function getRequest(fn, err) {
+	    var o = this.o
+	      , method = (o['method'] || 'GET').toUpperCase()
+	      , url = typeof o === 'string' ? o : o['url']
+	      // convert non-string objects to query-string form unless o['processData'] is false
+	      , data = (o['processData'] !== false && o['data'] && typeof o['data'] !== 'string')
+	        ? reqwest.toQueryString(o['data'])
+	        : (o['data'] || null)
+	      , http
+	      , sendWait = false
+	
+	    // if we're working on a GET request and we have data then we should append
+	    // query string to end of URL and not post data
+	    if ((o['type'] == 'jsonp' || method == 'GET') && data) {
+	      url = urlappend(url, data)
+	      data = null
+	    }
+	
+	    if (o['type'] == 'jsonp') return handleJsonp(o, fn, err, url)
+	
+	    // get the xhr from the factory if passed
+	    // if the factory returns null, fall-back to ours
+	    http = (o.xhr && o.xhr(o)) || xhr(o)
+	
+	    http.open(method, url, o['async'] === false ? false : true)
+	    setHeaders(http, o)
+	    setCredentials(http, o)
+	    if (context[xDomainRequest] && http instanceof context[xDomainRequest]) {
+	        http.onload = fn
+	        http.onerror = err
+	        // NOTE: see
+	        // http://social.msdn.microsoft.com/Forums/en-US/iewebdevelopment/thread/30ef3add-767c-4436-b8a9-f1ca19b4812e
+	        http.onprogress = function() {}
+	        sendWait = true
+	    } else {
+	      http.onreadystatechange = handleReadyState(this, fn, err)
+	    }
+	    o['before'] && o['before'](http)
+	    if (sendWait) {
+	      setTimeout(function () {
+	        http.send(data)
+	      }, 200)
+	    } else {
+	      http.send(data)
+	    }
+	    return http
+	  }
+	
+	  function Reqwest(o, fn) {
+	    this.o = o
+	    this.fn = fn
+	
+	    init.apply(this, arguments)
+	  }
+	
+	  function setType(header) {
+	    // json, javascript, text/plain, text/html, xml
+	    if (header === null) return undefined; //In case of no content-type.
+	    if (header.match('json')) return 'json'
+	    if (header.match('javascript')) return 'js'
+	    if (header.match('text')) return 'html'
+	    if (header.match('xml')) return 'xml'
+	  }
+	
+	  function init(o, fn) {
+	
+	    this.url = typeof o == 'string' ? o : o['url']
+	    this.timeout = null
+	
+	    // whether request has been fulfilled for purpose
+	    // of tracking the Promises
+	    this._fulfilled = false
+	    // success handlers
+	    this._successHandler = function(){}
+	    this._fulfillmentHandlers = []
+	    // error handlers
+	    this._errorHandlers = []
+	    // complete (both success and fail) handlers
+	    this._completeHandlers = []
+	    this._erred = false
+	    this._responseArgs = {}
+	
+	    var self = this
+	
+	    fn = fn || function () {}
+	
+	    if (o['timeout']) {
+	      this.timeout = setTimeout(function () {
+	        timedOut()
+	      }, o['timeout'])
+	    }
+	
+	    if (o['success']) {
+	      this._successHandler = function () {
+	        o['success'].apply(o, arguments)
+	      }
+	    }
+	
+	    if (o['error']) {
+	      this._errorHandlers.push(function () {
+	        o['error'].apply(o, arguments)
+	      })
+	    }
+	
+	    if (o['complete']) {
+	      this._completeHandlers.push(function () {
+	        o['complete'].apply(o, arguments)
+	      })
+	    }
+	
+	    function complete (resp) {
+	      o['timeout'] && clearTimeout(self.timeout)
+	      self.timeout = null
+	      while (self._completeHandlers.length > 0) {
+	        self._completeHandlers.shift()(resp)
+	      }
+	    }
+	
+	    function success (resp) {
+	      var type = o['type'] || resp && setType(resp.getResponseHeader('Content-Type')) // resp can be undefined in IE
+	      resp = (type !== 'jsonp') ? self.request : resp
+	      // use global data filter on response text
+	      var filteredResponse = globalSetupOptions.dataFilter(resp.responseText, type)
+	        , r = filteredResponse
+	      try {
+	        resp.responseText = r
+	      } catch (e) {
+	        // can't assign this in IE<=8, just ignore
+	      }
+	      if (r) {
+	        switch (type) {
+	        case 'json':
+	          try {
+	            resp = context.JSON ? context.JSON.parse(r) : eval('(' + r + ')')
+	          } catch (err) {
+	            return error(resp, 'Could not parse JSON in response', err)
+	          }
+	          break
+	        case 'js':
+	          resp = eval(r)
+	          break
+	        case 'html':
+	          resp = r
+	          break
+	        case 'xml':
+	          resp = resp.responseXML
+	              && resp.responseXML.parseError // IE trololo
+	              && resp.responseXML.parseError.errorCode
+	              && resp.responseXML.parseError.reason
+	            ? null
+	            : resp.responseXML
+	          break
+	        }
+	      }
+	
+	      self._responseArgs.resp = resp
+	      self._fulfilled = true
+	      fn(resp)
+	      self._successHandler(resp)
+	      while (self._fulfillmentHandlers.length > 0) {
+	        resp = self._fulfillmentHandlers.shift()(resp)
+	      }
+	
+	      complete(resp)
+	    }
+	
+	    function timedOut() {
+	      self._timedOut = true
+	      self.request.abort()
+	    }
+	
+	    function error(resp, msg, t) {
+	      resp = self.request
+	      self._responseArgs.resp = resp
+	      self._responseArgs.msg = msg
+	      self._responseArgs.t = t
+	      self._erred = true
+	      while (self._errorHandlers.length > 0) {
+	        self._errorHandlers.shift()(resp, msg, t)
+	      }
+	      complete(resp)
+	    }
+	
+	    this.request = getRequest.call(this, success, error)
+	  }
+	
+	  Reqwest.prototype = {
+	    abort: function () {
+	      this._aborted = true
+	      this.request.abort()
+	    }
+	
+	  , retry: function () {
+	      init.call(this, this.o, this.fn)
+	    }
+	
+	    /**
+	     * Small deviation from the Promises A CommonJs specification
+	     * http://wiki.commonjs.org/wiki/Promises/A
+	     */
+	
+	    /**
+	     * `then` will execute upon successful requests
+	     */
+	  , then: function (success, fail) {
+	      success = success || function () {}
+	      fail = fail || function () {}
+	      if (this._fulfilled) {
+	        this._responseArgs.resp = success(this._responseArgs.resp)
+	      } else if (this._erred) {
+	        fail(this._responseArgs.resp, this._responseArgs.msg, this._responseArgs.t)
+	      } else {
+	        this._fulfillmentHandlers.push(success)
+	        this._errorHandlers.push(fail)
+	      }
+	      return this
+	    }
+	
+	    /**
+	     * `always` will execute whether the request succeeds or fails
+	     */
+	  , always: function (fn) {
+	      if (this._fulfilled || this._erred) {
+	        fn(this._responseArgs.resp)
+	      } else {
+	        this._completeHandlers.push(fn)
+	      }
+	      return this
+	    }
+	
+	    /**
+	     * `fail` will execute when the request fails
+	     */
+	  , fail: function (fn) {
+	      if (this._erred) {
+	        fn(this._responseArgs.resp, this._responseArgs.msg, this._responseArgs.t)
+	      } else {
+	        this._errorHandlers.push(fn)
+	      }
+	      return this
+	    }
+	  , 'catch': function (fn) {
+	      return this.fail(fn)
+	    }
+	  }
+	
+	  function reqwest(o, fn) {
+	    return new Reqwest(o, fn)
+	  }
+	
+	  // normalize newline variants according to spec -> CRLF
+	  function normalize(s) {
+	    return s ? s.replace(/\r?\n/g, '\r\n') : ''
+	  }
+	
+	  function serial(el, cb) {
+	    var n = el.name
+	      , t = el.tagName.toLowerCase()
+	      , optCb = function (o) {
+	          // IE gives value="" even where there is no value attribute
+	          // 'specified' ref: http://www.w3.org/TR/DOM-Level-3-Core/core.html#ID-862529273
+	          if (o && !o['disabled'])
+	            cb(n, normalize(o['attributes']['value'] && o['attributes']['value']['specified'] ? o['value'] : o['text']))
+	        }
+	      , ch, ra, val, i
+	
+	    // don't serialize elements that are disabled or without a name
+	    if (el.disabled || !n) return
+	
+	    switch (t) {
+	    case 'input':
+	      if (!/reset|button|image|file/i.test(el.type)) {
+	        ch = /checkbox/i.test(el.type)
+	        ra = /radio/i.test(el.type)
+	        val = el.value
+	        // WebKit gives us "" instead of "on" if a checkbox has no value, so correct it here
+	        ;(!(ch || ra) || el.checked) && cb(n, normalize(ch && val === '' ? 'on' : val))
+	      }
+	      break
+	    case 'textarea':
+	      cb(n, normalize(el.value))
+	      break
+	    case 'select':
+	      if (el.type.toLowerCase() === 'select-one') {
+	        optCb(el.selectedIndex >= 0 ? el.options[el.selectedIndex] : null)
+	      } else {
+	        for (i = 0; el.length && i < el.length; i++) {
+	          el.options[i].selected && optCb(el.options[i])
+	        }
+	      }
+	      break
+	    }
+	  }
+	
+	  // collect up all form elements found from the passed argument elements all
+	  // the way down to child elements; pass a '<form>' or form fields.
+	  // called with 'this'=callback to use for serial() on each element
+	  function eachFormElement() {
+	    var cb = this
+	      , e, i
+	      , serializeSubtags = function (e, tags) {
+	          var i, j, fa
+	          for (i = 0; i < tags.length; i++) {
+	            fa = e[byTag](tags[i])
+	            for (j = 0; j < fa.length; j++) serial(fa[j], cb)
+	          }
+	        }
+	
+	    for (i = 0; i < arguments.length; i++) {
+	      e = arguments[i]
+	      if (/input|select|textarea/i.test(e.tagName)) serial(e, cb)
+	      serializeSubtags(e, [ 'input', 'select', 'textarea' ])
+	    }
+	  }
+	
+	  // standard query string style serialization
+	  function serializeQueryString() {
+	    return reqwest.toQueryString(reqwest.serializeArray.apply(null, arguments))
+	  }
+	
+	  // { 'name': 'value', ... } style serialization
+	  function serializeHash() {
+	    var hash = {}
+	    eachFormElement.apply(function (name, value) {
+	      if (name in hash) {
+	        hash[name] && !isArray(hash[name]) && (hash[name] = [hash[name]])
+	        hash[name].push(value)
+	      } else hash[name] = value
+	    }, arguments)
+	    return hash
+	  }
+	
+	  // [ { name: 'name', value: 'value' }, ... ] style serialization
+	  reqwest.serializeArray = function () {
+	    var arr = []
+	    eachFormElement.apply(function (name, value) {
+	      arr.push({name: name, value: value})
+	    }, arguments)
+	    return arr
+	  }
+	
+	  reqwest.serialize = function () {
+	    if (arguments.length === 0) return ''
+	    var opt, fn
+	      , args = Array.prototype.slice.call(arguments, 0)
+	
+	    opt = args.pop()
+	    opt && opt.nodeType && args.push(opt) && (opt = null)
+	    opt && (opt = opt.type)
+	
+	    if (opt == 'map') fn = serializeHash
+	    else if (opt == 'array') fn = reqwest.serializeArray
+	    else fn = serializeQueryString
+	
+	    return fn.apply(null, args)
+	  }
+	
+	  reqwest.toQueryString = function (o, trad) {
+	    var prefix, i
+	      , traditional = trad || false
+	      , s = []
+	      , enc = encodeURIComponent
+	      , add = function (key, value) {
+	          // If value is a function, invoke it and return its value
+	          value = ('function' === typeof value) ? value() : (value == null ? '' : value)
+	          s[s.length] = enc(key) + '=' + enc(value)
+	        }
+	    // If an array was passed in, assume that it is an array of form elements.
+	    if (isArray(o)) {
+	      for (i = 0; o && i < o.length; i++) add(o[i]['name'], o[i]['value'])
+	    } else {
+	      // If traditional, encode the "old" way (the way 1.3.2 or older
+	      // did it), otherwise encode params recursively.
+	      for (prefix in o) {
+	        if (o.hasOwnProperty(prefix)) buildParams(prefix, o[prefix], traditional, add)
+	      }
+	    }
+	
+	    // spaces should be + according to spec
+	    return s.join('&').replace(/%20/g, '+')
+	  }
+	
+	  function buildParams(prefix, obj, traditional, add) {
+	    var name, i, v
+	      , rbracket = /\[\]$/
+	
+	    if (isArray(obj)) {
+	      // Serialize array item.
+	      for (i = 0; obj && i < obj.length; i++) {
+	        v = obj[i]
+	        if (traditional || rbracket.test(prefix)) {
+	          // Treat each array item as a scalar.
+	          add(prefix, v)
+	        } else {
+	          buildParams(prefix + '[' + (typeof v === 'object' ? i : '') + ']', v, traditional, add)
+	        }
+	      }
+	    } else if (obj && obj.toString() === '[object Object]') {
+	      // Serialize object item.
+	      for (name in obj) {
+	        buildParams(prefix + '[' + name + ']', obj[name], traditional, add)
+	      }
+	
+	    } else {
+	      // Serialize scalar item.
+	      add(prefix, obj)
+	    }
+	  }
+	
+	  reqwest.getcallbackPrefix = function () {
+	    return callbackPrefix
+	  }
+	
+	  // jQuery and Zepto compatibility, differences can be remapped here so you can call
+	  // .ajax.compat(options, callback)
+	  reqwest.compat = function (o, fn) {
+	    if (o) {
+	      o['type'] && (o['method'] = o['type']) && delete o['type']
+	      o['dataType'] && (o['type'] = o['dataType'])
+	      o['jsonpCallback'] && (o['jsonpCallbackName'] = o['jsonpCallback']) && delete o['jsonpCallback']
+	      o['jsonp'] && (o['jsonpCallback'] = o['jsonp'])
+	    }
+	    return new Reqwest(o, fn)
+	  }
+	
+	  reqwest.ajaxSetup = function (options) {
+	    options = options || {}
+	    for (var k in options) {
+	      globalSetupOptions[k] = options[k]
+	    }
+	  }
+	
+	  return reqwest
+	});
+
 
 /***/ },
 /* 310 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
-	
-	exports.__esModule = true;
-	
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-	
-	exports['default'] = connect;
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	__webpack_require__(311);
-	
-	var _react = __webpack_require__(139);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _utilsIsPlainObject = __webpack_require__(312);
-	
-	var _utilsIsPlainObject2 = _interopRequireDefault(_utilsIsPlainObject);
-	
-	var _utilsDeepValue = __webpack_require__(313);
-	
-	var _utilsDeepValue2 = _interopRequireDefault(_utilsDeepValue);
-	
-	var _utilsShallowEqual = __webpack_require__(314);
-	
-	var _utilsShallowEqual2 = _interopRequireDefault(_utilsShallowEqual);
-	
-	var _utilsErrors = __webpack_require__(315);
-	
-	var _utilsErrors2 = _interopRequireDefault(_utilsErrors);
-	
-	var _PromiseState = __webpack_require__(316);
-	
-	var _PromiseState2 = _interopRequireDefault(_PromiseState);
-	
-	var _hoistNonReactStatics = __webpack_require__(317);
-	
-	var _hoistNonReactStatics2 = _interopRequireDefault(_hoistNonReactStatics);
-	
-	var _invariant = __webpack_require__(248);
-	
-	var _invariant2 = _interopRequireDefault(_invariant);
-	
-	var defaultMapPropsToRequestsToProps = function defaultMapPropsToRequestsToProps() {
-	  return {};
-	};
-	
-	function getDisplayName(WrappedComponent) {
-	  return WrappedComponent.displayName || WrappedComponent.name || 'Component';
-	}
-	
-	// Helps track hot reloading.
-	var nextVersion = 0;
-	
-	function connect(mapPropsToRequestsToProps) {
-	  var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-	
-	  var finalMapPropsToRequestsToProps = mapPropsToRequestsToProps || defaultMapPropsToRequestsToProps;
-	  var _options$withRef = options.withRef;
-	  var withRef = _options$withRef === undefined ? false : _options$withRef;
-	
-	  // Helps track hot reloading.
-	  var version = nextVersion++;
-	
-	  function coerceMappings(rawMappings) {
-	    _invariant2['default'](_utilsIsPlainObject2['default'](rawMappings), '`mapPropsToRequestsToProps` must return an object. Instead received %s.', rawMappings);
-	
-	    var mappings = {};
-	    Object.keys(rawMappings).forEach(function (prop) {
-	      mappings[prop] = coerceMapping(prop, rawMappings[prop]);
-	    });
-	    return mappings;
-	  }
-	
-	  function coerceMapping(prop, mapping) {
-	    if (Function.prototype.isPrototypeOf(mapping)) {
-	      return mapping;
-	    }
-	
-	    if (typeof mapping === 'string') {
-	      mapping = { url: mapping };
-	    }
-	
-	    _invariant2['default'](_utilsIsPlainObject2['default'](mapping), 'Request for `%s` must be either a string or a plain object. Instead received %s', prop, mapping);
-	    _invariant2['default'](mapping.url || mapping.value, 'Request object for `%s` must have `url` (or `value`) attribute.', prop);
-	    _invariant2['default'](!(mapping.url && mapping.value), 'Request object for `%s` must not have both `url` and `value` attributes.', prop);
-	
-	    mapping = assignDefaults(mapping);
-	
-	    mapping.equals = (function (that) {
-	      var _this = this;
-	
-	      if (this.comparison !== undefined) {
-	        return this.comparison === that.comparison;
-	      }
-	
-	      return ['value', 'url', 'method', 'headers', 'body'].every(function (c) {
-	        return _utilsShallowEqual2['default'](_utilsDeepValue2['default'](_this, c), _utilsDeepValue2['default'](that, c));
-	      });
-	    }).bind(mapping);
-	
-	    return mapping;
-	  }
-	
-	  function assignDefaults(mapping) {
-	    return Object.assign({
-	      method: 'GET',
-	      credentials: 'same-origin',
-	      redirect: 'follow'
-	    }, mapping, {
-	      headers: Object.assign({
-	        'Accept': 'application/json',
-	        'Content-Type': 'application/json'
-	      }, mapping.headers)
-	    });
-	  }
-	
-	  function buildRequest(mapping) {
-	    return new window.Request(mapping.url, {
-	      method: mapping.method,
-	      headers: mapping.headers,
-	      credentials: mapping.credentials,
-	      redirect: mapping.redirect,
-	      body: mapping.body
-	    });
-	  }
-	
-	  function handleResponse(response) {
-	    var json = response.json(); // TODO: support other response types
-	    if (response.status >= 200 && response.status < 300) {
-	      // TODO: support custom acceptable statuses
-	      return json;
-	    } else {
-	      return json.then(function (cause) {
-	        return Promise.reject(_utilsErrors2['default'](cause));
-	      });
-	    }
-	  }
-	
-	  return function wrapWithConnect(WrappedComponent) {
-	    var RefetchConnect = (function (_Component) {
-	      _inherits(RefetchConnect, _Component);
-	
-	      function RefetchConnect(props, context) {
-	        _classCallCheck(this, RefetchConnect);
-	
-	        _Component.call(this, props, context);
-	        this.version = version;
-	        this.state = { mappings: {}, startedAts: {}, data: {}, refreshTimeouts: {} };
-	      }
-	
-	      RefetchConnect.prototype.componentWillMount = function componentWillMount() {
-	        this.refetchDataFromProps();
-	      };
-	
-	      RefetchConnect.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
-	        this.refetchDataFromProps(nextProps);
-	      };
-	
-	      RefetchConnect.prototype.componentWillUnmount = function componentWillUnmount() {
-	        this.clearAllRefreshTimeouts();
-	      };
-	
-	      RefetchConnect.prototype.render = function render() {
-	        var ref = withRef ? 'wrappedInstance' : null;
-	        return _react2['default'].createElement(WrappedComponent, _extends({}, this.state.data, this.props, { ref: ref }));
-	      };
-	
-	      RefetchConnect.prototype.getWrappedInstance = function getWrappedInstance() {
-	        _invariant2['default'](withRef, 'To access the wrapped instance, you need to specify ' + '{ withRef: true } as the fourth argument of the connect() call.');
-	
-	        return this.refs.wrappedInstance;
-	      };
-	
-	      RefetchConnect.prototype.refetchDataFromProps = function refetchDataFromProps() {
-	        var props = arguments.length <= 0 || arguments[0] === undefined ? this.props : arguments[0];
-	
-	        this.refetchDataFromMappings(finalMapPropsToRequestsToProps(props) || {});
-	      };
-	
-	      RefetchConnect.prototype.refetchDataFromMappings = function refetchDataFromMappings(mappings) {
-	        var _this2 = this;
-	
-	        mappings = coerceMappings(mappings);
-	        Object.keys(mappings).forEach(function (prop) {
-	          var mapping = mappings[prop];
-	
-	          if (Function.prototype.isPrototypeOf(mapping)) {
-	            _this2.setAtomicState(prop, new Date(), mapping, function () {
-	              for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	                args[_key] = arguments[_key];
-	              }
-	
-	              _this2.refetchDataFromMappings(mapping.apply(undefined, args || {}));
-	            });
-	            return;
-	          }
-	
-	          if (mapping.force || !mapping.equals(_this2.state.mappings[prop] || {})) {
-	            _this2.refetchDatum(prop, mapping);
-	          }
-	        });
-	      };
-	
-	      RefetchConnect.prototype.refetchDatum = function refetchDatum(prop, mapping) {
-	        var startedAt = new Date();
-	
-	        if (this.state.refreshTimeouts[prop]) {
-	          window.clearTimeout(this.state.refreshTimeouts[prop]);
-	        }
-	
-	        return this.createPromise(prop, mapping, startedAt);
-	      };
-	
-	      RefetchConnect.prototype.createPromise = function createPromise(prop, mapping, startedAt) {
-	        var _this3 = this;
-	
-	        var initPS = this.createInitialPromiseState(prop, mapping);
-	        var onFulfillment = this.createPromiseStateOnFulfillment(prop, mapping, startedAt);
-	        var onRejection = this.createPromiseStateOnRejection(prop, mapping, startedAt);
-	
-	        if (mapping.value) {
-	          var meta = mapping.meta || {};
-	          this.setAtomicState(prop, startedAt, mapping, initPS(meta));
-	          return Promise.resolve(mapping.value).then(onFulfillment(meta), onRejection(meta));
-	        } else {
-	          var _ret = (function () {
-	            var request = buildRequest(mapping);
-	            var meta = { request: request };
-	            _this3.setAtomicState(prop, startedAt, mapping, initPS(meta));
-	
-	            var fetched = window.fetch(request);
-	            return {
-	              v: fetched.then(function (response) {
-	                meta.response = response;
-	                return fetched.then(handleResponse).then(onFulfillment(meta), onRejection(meta));
-	              })
-	            };
-	          })();
-	
-	          if (typeof _ret === 'object') return _ret.v;
-	        }
-	      };
-	
-	      RefetchConnect.prototype.createInitialPromiseState = function createInitialPromiseState(prop, mapping) {
-	        var _this4 = this;
-	
-	        return function (meta) {
-	          return mapping.refreshing ? _PromiseState2['default'].refresh(_this4.state.data[prop], meta) : _PromiseState2['default'].create(meta);
-	        };
-	      };
-	
-	      RefetchConnect.prototype.createPromiseStateOnFulfillment = function createPromiseStateOnFulfillment(prop, mapping, startedAt) {
-	        var _this5 = this;
-	
-	        return function (meta) {
-	          return function (value) {
-	            var refreshTimeout = null;
-	            if (mapping.refreshInterval > 0) {
-	              refreshTimeout = window.setTimeout(function () {
-	                _this5.refetchDatum(prop, Object.assign({}, mapping, { refreshing: true, force: true }));
-	              }, mapping.refreshInterval);
-	            }
-	
-	            if (Function.prototype.isPrototypeOf(mapping.then)) {
-	              _this5.refetchDatum(prop, coerceMapping(null, mapping.then(value, meta)));
-	              return;
-	            }
-	
-	            _this5.setAtomicState(prop, startedAt, mapping, _PromiseState2['default'].resolve(value, meta), refreshTimeout, function () {
-	              if (Function.prototype.isPrototypeOf(mapping.andThen)) {
-	                _this5.refetchDataFromMappings(mapping.andThen(value, meta));
-	              }
-	            });
-	          };
-	        };
-	      };
-	
-	      RefetchConnect.prototype.createPromiseStateOnRejection = function createPromiseStateOnRejection(prop, mapping, startedAt) {
-	        var _this6 = this;
-	
-	        return function (meta) {
-	          return function (reason) {
-	            if (Function.prototype.isPrototypeOf(mapping['catch'])) {
-	              _this6.refetchDatum(prop, coerceMapping(null, mapping['catch'](reason, meta)));
-	              return;
-	            }
-	
-	            _this6.setAtomicState(prop, startedAt, mapping, _PromiseState2['default'].reject(reason, meta), null, function () {
-	              if (Function.prototype.isPrototypeOf(mapping.andCatch)) {
-	                _this6.refetchDataFromMappings(mapping.andCatch(reason, meta));
-	              }
-	            });
-	          };
-	        };
-	      };
-	
-	      RefetchConnect.prototype.setAtomicState = function setAtomicState(prop, startedAt, mapping, datum, refreshTimeout, callback) {
-	        this.setState(function (prevState) {
-	          var _Object$assign, _Object$assign2, _Object$assign3, _Object$assign4;
-	
-	          if (startedAt < prevState.startedAts[prop]) {
-	            return {};
-	          }
-	
-	          return {
-	            startedAts: Object.assign(prevState.startedAts, (_Object$assign = {}, _Object$assign[prop] = startedAt, _Object$assign)),
-	            mappings: Object.assign(prevState.mappings, (_Object$assign2 = {}, _Object$assign2[prop] = mapping, _Object$assign2)),
-	            data: Object.assign(prevState.data, (_Object$assign3 = {}, _Object$assign3[prop] = datum, _Object$assign3)),
-	            refreshTimeouts: Object.assign(prevState.refreshTimeouts, (_Object$assign4 = {}, _Object$assign4[prop] = refreshTimeout, _Object$assign4))
-	          };
-	        }, callback);
-	      };
-	
-	      RefetchConnect.prototype.clearAllRefreshTimeouts = function clearAllRefreshTimeouts() {
-	        var _this7 = this;
-	
-	        Object.keys(this.state.refreshTimeouts).forEach(function (prop) {
-	          clearTimeout(_this7.state.refreshTimeouts[prop]);
-	        });
-	      };
-	
-	      return RefetchConnect;
-	    })(_react.Component);
-	
-	    RefetchConnect.displayName = 'Refetch.connect(' + getDisplayName(WrappedComponent) + ')';
-	    RefetchConnect.WrappedComponent = WrappedComponent;
-	
-	    if (process.env.NODE_ENV !== 'production') {
-	      RefetchConnect.prototype.componentWillUpdate = function componentWillUpdate() {
-	        if (this.version === version) {
-	          return;
-	        }
-	
-	        // We are hot reloading!
-	        this.version = version;
-	        this.clearAllRefreshTimeouts();
-	        this.refetchDataFromProps();
-	      };
-	    }
-	
-	    return _hoistNonReactStatics2['default'](RefetchConnect, WrappedComponent);
-	  };
-	}
-	
-	module.exports = exports['default'];
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11)))
+	/* (ignored) */
 
 /***/ },
 /* 311 */
-/***/ function(module, exports) {
-
-	(function() {
-	  'use strict';
-	
-	  if (self.fetch) {
-	    return
-	  }
-	
-	  function normalizeName(name) {
-	    if (typeof name !== 'string') {
-	      name = name.toString();
-	    }
-	    if (/[^a-z0-9\-#$%&'*+.\^_`|~]/i.test(name)) {
-	      throw new TypeError('Invalid character in header field name')
-	    }
-	    return name.toLowerCase()
-	  }
-	
-	  function normalizeValue(value) {
-	    if (typeof value !== 'string') {
-	      value = value.toString();
-	    }
-	    return value
-	  }
-	
-	  function Headers(headers) {
-	    this.map = {}
-	
-	    if (headers instanceof Headers) {
-	      headers.forEach(function(value, name) {
-	        this.append(name, value)
-	      }, this)
-	
-	    } else if (headers) {
-	      Object.getOwnPropertyNames(headers).forEach(function(name) {
-	        this.append(name, headers[name])
-	      }, this)
-	    }
-	  }
-	
-	  Headers.prototype.append = function(name, value) {
-	    name = normalizeName(name)
-	    value = normalizeValue(value)
-	    var list = this.map[name]
-	    if (!list) {
-	      list = []
-	      this.map[name] = list
-	    }
-	    list.push(value)
-	  }
-	
-	  Headers.prototype['delete'] = function(name) {
-	    delete this.map[normalizeName(name)]
-	  }
-	
-	  Headers.prototype.get = function(name) {
-	    var values = this.map[normalizeName(name)]
-	    return values ? values[0] : null
-	  }
-	
-	  Headers.prototype.getAll = function(name) {
-	    return this.map[normalizeName(name)] || []
-	  }
-	
-	  Headers.prototype.has = function(name) {
-	    return this.map.hasOwnProperty(normalizeName(name))
-	  }
-	
-	  Headers.prototype.set = function(name, value) {
-	    this.map[normalizeName(name)] = [normalizeValue(value)]
-	  }
-	
-	  Headers.prototype.forEach = function(callback, thisArg) {
-	    Object.getOwnPropertyNames(this.map).forEach(function(name) {
-	      this.map[name].forEach(function(value) {
-	        callback.call(thisArg, value, name, this)
-	      }, this)
-	    }, this)
-	  }
-	
-	  function consumed(body) {
-	    if (body.bodyUsed) {
-	      return Promise.reject(new TypeError('Already read'))
-	    }
-	    body.bodyUsed = true
-	  }
-	
-	  function fileReaderReady(reader) {
-	    return new Promise(function(resolve, reject) {
-	      reader.onload = function() {
-	        resolve(reader.result)
-	      }
-	      reader.onerror = function() {
-	        reject(reader.error)
-	      }
-	    })
-	  }
-	
-	  function readBlobAsArrayBuffer(blob) {
-	    var reader = new FileReader()
-	    reader.readAsArrayBuffer(blob)
-	    return fileReaderReady(reader)
-	  }
-	
-	  function readBlobAsText(blob) {
-	    var reader = new FileReader()
-	    reader.readAsText(blob)
-	    return fileReaderReady(reader)
-	  }
-	
-	  var support = {
-	    blob: 'FileReader' in self && 'Blob' in self && (function() {
-	      try {
-	        new Blob();
-	        return true
-	      } catch(e) {
-	        return false
-	      }
-	    })(),
-	    formData: 'FormData' in self
-	  }
-	
-	  function Body() {
-	    this.bodyUsed = false
-	
-	
-	    this._initBody = function(body) {
-	      this._bodyInit = body
-	      if (typeof body === 'string') {
-	        this._bodyText = body
-	      } else if (support.blob && Blob.prototype.isPrototypeOf(body)) {
-	        this._bodyBlob = body
-	      } else if (support.formData && FormData.prototype.isPrototypeOf(body)) {
-	        this._bodyFormData = body
-	      } else if (!body) {
-	        this._bodyText = ''
-	      } else {
-	        throw new Error('unsupported BodyInit type')
-	      }
-	    }
-	
-	    if (support.blob) {
-	      this.blob = function() {
-	        var rejected = consumed(this)
-	        if (rejected) {
-	          return rejected
-	        }
-	
-	        if (this._bodyBlob) {
-	          return Promise.resolve(this._bodyBlob)
-	        } else if (this._bodyFormData) {
-	          throw new Error('could not read FormData body as blob')
-	        } else {
-	          return Promise.resolve(new Blob([this._bodyText]))
-	        }
-	      }
-	
-	      this.arrayBuffer = function() {
-	        return this.blob().then(readBlobAsArrayBuffer)
-	      }
-	
-	      this.text = function() {
-	        var rejected = consumed(this)
-	        if (rejected) {
-	          return rejected
-	        }
-	
-	        if (this._bodyBlob) {
-	          return readBlobAsText(this._bodyBlob)
-	        } else if (this._bodyFormData) {
-	          throw new Error('could not read FormData body as text')
-	        } else {
-	          return Promise.resolve(this._bodyText)
-	        }
-	      }
-	    } else {
-	      this.text = function() {
-	        var rejected = consumed(this)
-	        return rejected ? rejected : Promise.resolve(this._bodyText)
-	      }
-	    }
-	
-	    if (support.formData) {
-	      this.formData = function() {
-	        return this.text().then(decode)
-	      }
-	    }
-	
-	    this.json = function() {
-	      return this.text().then(JSON.parse)
-	    }
-	
-	    return this
-	  }
-	
-	  // HTTP methods whose capitalization should be normalized
-	  var methods = ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PUT']
-	
-	  function normalizeMethod(method) {
-	    var upcased = method.toUpperCase()
-	    return (methods.indexOf(upcased) > -1) ? upcased : method
-	  }
-	
-	  function Request(url, options) {
-	    options = options || {}
-	    this.url = url
-	
-	    this.credentials = options.credentials || 'omit'
-	    this.headers = new Headers(options.headers)
-	    this.method = normalizeMethod(options.method || 'GET')
-	    this.mode = options.mode || null
-	    this.referrer = null
-	
-	    if ((this.method === 'GET' || this.method === 'HEAD') && options.body) {
-	      throw new TypeError('Body not allowed for GET or HEAD requests')
-	    }
-	    this._initBody(options.body)
-	  }
-	
-	  function decode(body) {
-	    var form = new FormData()
-	    body.trim().split('&').forEach(function(bytes) {
-	      if (bytes) {
-	        var split = bytes.split('=')
-	        var name = split.shift().replace(/\+/g, ' ')
-	        var value = split.join('=').replace(/\+/g, ' ')
-	        form.append(decodeURIComponent(name), decodeURIComponent(value))
-	      }
-	    })
-	    return form
-	  }
-	
-	  function headers(xhr) {
-	    var head = new Headers()
-	    var pairs = xhr.getAllResponseHeaders().trim().split('\n')
-	    pairs.forEach(function(header) {
-	      var split = header.trim().split(':')
-	      var key = split.shift().trim()
-	      var value = split.join(':').trim()
-	      head.append(key, value)
-	    })
-	    return head
-	  }
-	
-	  Body.call(Request.prototype)
-	
-	  function Response(bodyInit, options) {
-	    if (!options) {
-	      options = {}
-	    }
-	
-	    this._initBody(bodyInit)
-	    this.type = 'default'
-	    this.url = null
-	    this.status = options.status
-	    this.ok = this.status >= 200 && this.status < 300
-	    this.statusText = options.statusText
-	    this.headers = options.headers instanceof Headers ? options.headers : new Headers(options.headers)
-	    this.url = options.url || ''
-	  }
-	
-	  Body.call(Response.prototype)
-	
-	  self.Headers = Headers;
-	  self.Request = Request;
-	  self.Response = Response;
-	
-	  self.fetch = function(input, init) {
-	    // TODO: Request constructor should accept input, init
-	    var request
-	    if (Request.prototype.isPrototypeOf(input) && !init) {
-	      request = input
-	    } else {
-	      request = new Request(input, init)
-	    }
-	
-	    return new Promise(function(resolve, reject) {
-	      var xhr = new XMLHttpRequest()
-	
-	      function responseURL() {
-	        if ('responseURL' in xhr) {
-	          return xhr.responseURL
-	        }
-	
-	        // Avoid security warnings on getResponseHeader when not allowed by CORS
-	        if (/^X-Request-URL:/m.test(xhr.getAllResponseHeaders())) {
-	          return xhr.getResponseHeader('X-Request-URL')
-	        }
-	
-	        return;
-	      }
-	
-	      xhr.onload = function() {
-	        var status = (xhr.status === 1223) ? 204 : xhr.status
-	        if (status < 100 || status > 599) {
-	          reject(new TypeError('Network request failed'))
-	          return
-	        }
-	        var options = {
-	          status: status,
-	          statusText: xhr.statusText,
-	          headers: headers(xhr),
-	          url: responseURL()
-	        }
-	        var body = 'response' in xhr ? xhr.response : xhr.responseText;
-	        resolve(new Response(body, options))
-	      }
-	
-	      xhr.onerror = function() {
-	        reject(new TypeError('Network request failed'))
-	      }
-	
-	      xhr.open(request.method, request.url, true)
-	
-	      if (request.credentials === 'include') {
-	        xhr.withCredentials = true
-	      }
-	
-	      if ('responseType' in xhr && support.blob) {
-	        xhr.responseType = 'blob'
-	      }
-	
-	      request.headers.forEach(function(value, name) {
-	        xhr.setRequestHeader(name, value)
-	      })
-	
-	      xhr.send(typeof request._bodyInit === 'undefined' ? null : request._bodyInit)
-	    })
-	  }
-	  self.fetch.polyfill = true
-	})();
-
-
-/***/ },
-/* 312 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	exports.__esModule = true;
-	exports['default'] = isPlainObject;
-	var fnToString = function fnToString(fn) {
-	  return Function.prototype.toString.call(fn);
-	};
-	
-	/**
-	 * @param {any} obj The object to inspect.
-	 * @returns {boolean} True if the argument appears to be a plain object.
-	 */
-	
-	function isPlainObject(obj) {
-	  if (!obj || typeof obj !== 'object') {
-	    return false;
-	  }
-	
-	  var proto = typeof obj.constructor === 'function' ? Object.getPrototypeOf(obj) : Object.prototype;
-	
-	  if (proto === null) {
-	    return true;
-	  }
-	
-	  var constructor = proto.constructor;
-	
-	  return typeof constructor === 'function' && constructor instanceof constructor && fnToString(constructor) === fnToString(Object);
-	}
-	
-	module.exports = exports['default'];
-
-/***/ },
-/* 313 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	exports.__esModule = true;
-	exports['default'] = deepValue;
-	
-	function deepValue(obj, path) {
-	  for (var i = 0, spath = path.split('.'), len = spath.length; i < len; i++) {
-	    if (obj === undefined) {
-	      return obj;
-	    }
-	    obj = obj[spath[i]];
-	  }
-	  return obj;
-	}
-	
-	module.exports = exports['default'];
-
-/***/ },
-/* 314 */
-/***/ function(module, exports) {
-
-	"use strict";
-	
-	exports.__esModule = true;
-	exports["default"] = shallowEqual;
-	
-	function shallowEqual(objA, objB) {
-	  if (objA === objB) {
-	    return true;
-	  }
-	
-	  if (objA === undefined || objB === undefined) {
-	    return false;
-	  }
-	
-	  var keysA = Object.keys(objA);
-	  var keysB = Object.keys(objB);
-	
-	  if (keysA.length !== keysB.length) {
-	    return false;
-	  }
-	
-	  // Test for A's keys different from B.
-	  var hasOwn = Object.prototype.hasOwnProperty;
-	  for (var i = 0; i < keysA.length; i++) {
-	    if (!hasOwn.call(objB, keysA[i]) || objA[keysA[i]] !== objB[keysA[i]]) {
-	      return false;
-	    }
-	  }
-	
-	  return true;
-	}
-	
-	module.exports = exports["default"];
-
-/***/ },
-/* 315 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	exports.__esModule = true;
-	exports['default'] = newError;
-	
-	function newError(cause) {
-	  var e = new Error(parse(cause));
-	  e.cause = cause;
-	  return e;
-	}
-	
-	function parse(cause) {
-	  var error = cause.error;
-	  var message = cause.message;
-	
-	  if (error) {
-	    return error;
-	  } else if (message) {
-	    return message;
-	  } else {
-	    return '';
-	  }
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 316 */
-/***/ function(module, exports) {
-
-	"use strict";
-	
-	exports.__esModule = true;
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	var PromiseState = (function () {
-	
-	  // creates a new PromiseState that is pending
-	
-	  PromiseState.create = function create(meta) {
-	    return new PromiseState({
-	      pending: true,
-	      meta: meta
-	    });
-	  };
-	
-	  // creates as PromiseState that is refreshing
-	  // can be called without a previous PromiseState and will be both pending and refreshing
-	
-	  PromiseState.refresh = function refresh(previous, meta) {
-	    var ps = previous || PromiseState.create(meta);
-	    ps.refreshing = true;
-	    return ps;
-	  };
-	
-	  // creates a PromiseState that is resolved with the given value
-	
-	  PromiseState.resolve = function resolve(value, meta) {
-	    return new PromiseState({
-	      fulfilled: true,
-	      value: value,
-	      meta: meta
-	    });
-	  };
-	
-	  // creates a PromiseState that is rejected with the given reason
-	
-	  PromiseState.reject = function reject(reason, meta) {
-	    return new PromiseState({
-	      rejected: true,
-	      reason: reason,
-	      meta: meta
-	    });
-	  };
-	
-	  // The PromiseState.all(iterable) method returns a PromiseState
-	  // that resolves when all of the PromiseStates in the iterable
-	  // argument have resolved, or rejects with the reason of the
-	  // first passed PromiseState that rejects.
-	
-	  PromiseState.all = function all(iterable) {
-	    return new PromiseState({
-	      pending: iterable.some(function (ps) {
-	        return ps.pending;
-	      }),
-	      refreshing: iterable.some(function (ps) {
-	        return ps.refreshing;
-	      }),
-	      fulfilled: iterable.every(function (ps) {
-	        return ps.fulfilled;
-	      }),
-	      rejected: iterable.some(function (ps) {
-	        return ps.rejected;
-	      }),
-	      value: iterable.map(function (ps) {
-	        return ps.value;
-	      }),
-	      reason: (iterable.find(function (ps) {
-	        return ps.reason;
-	      }) || {}).reason,
-	      meta: iterable.map(function (ps) {
-	        return ps.meta;
-	      })
-	    });
-	  };
-	
-	  // The PromiseState.race(iterable) method returns a PromiseState
-	  // that resolves or rejects as soon as one of the PromiseStates in
-	  // the iterable resolves or rejects, with the value or reason
-	  // from that PromiseState.
-	
-	  PromiseState.race = function race(iterable) {
-	    var winner = iterable.find(function (ps) {
-	      return ps.settled;
-	    });
-	
-	    return new PromiseState({
-	      pending: !winner && iterable.some(function (ps) {
-	        return ps.pending;
-	      }),
-	      refreshing: !winner && iterable.some(function (ps) {
-	        return ps.refreshing;
-	      }),
-	      fulfilled: winner && winner.fulfilled,
-	      rejected: winner && winner.rejected,
-	      value: winner && winner.value,
-	      reason: winner && winner.reason,
-	      meta: winner && winner.meta
-	    });
-	  };
-	
-	  // Constructor for creating a raw PromiseState. DO NOT USE DIRECTLY. Instead, use PromiseState.create() or other static constructors
-	
-	  function PromiseState(_ref) {
-	    var _ref$pending = _ref.pending;
-	    var pending = _ref$pending === undefined ? false : _ref$pending;
-	    var _ref$refreshing = _ref.refreshing;
-	    var refreshing = _ref$refreshing === undefined ? false : _ref$refreshing;
-	    var _ref$fulfilled = _ref.fulfilled;
-	    var fulfilled = _ref$fulfilled === undefined ? false : _ref$fulfilled;
-	    var _ref$rejected = _ref.rejected;
-	    var rejected = _ref$rejected === undefined ? false : _ref$rejected;
-	    var _ref$value = _ref.value;
-	    var value = _ref$value === undefined ? null : _ref$value;
-	    var _ref$reason = _ref.reason;
-	    var reason = _ref$reason === undefined ? null : _ref$reason;
-	    var _ref$meta = _ref.meta;
-	    var meta = _ref$meta === undefined ? {} : _ref$meta;
-	
-	    _classCallCheck(this, PromiseState);
-	
-	    this.pending = pending;
-	    this.refreshing = refreshing;
-	    this.fulfilled = fulfilled;
-	    this.rejected = rejected;
-	    this.settled = fulfilled || rejected;
-	    this.value = value;
-	    this.reason = reason;
-	    this.meta = meta;
-	  }
-	
-	  // Appends and calls fulfillment and rejection handlers on the PromiseState,
-	  // and returns a new PromiseState resolving to the return value of the called handler,
-	  // or to its original settled value if the promise was not handled.
-	  // The handler functions take the value/reason and meta as parameters.
-	  // (i.e. if the relevant handler onFulfilled or onRejected is undefined).
-	  // Note, unlike Promise.then(), these handlers are called immediately.
-	
-	  PromiseState.prototype.then = function then(onFulFilled, onRejected) {
-	    if (this.fulfilled && onFulFilled) {
-	      return this._mapFlatMapValue(onFulFilled(this.value, this.meta));
-	    }
-	
-	    if (this.rejected && onRejected) {
-	      return this._mapFlatMapValue(onRejected(this.reason, this.meta));
-	    }
-	
-	    return this;
-	  };
-	
-	  // Appends and calls a rejection handler callback to the PromiseState,
-	  // and returns a new PromiseState resolving to the return value of the
-	  // callback if it is called, or to its original fulfillment value if
-	  // the PromiseState is instead fulfilled. The handler function take
-	  // the reason and meta as parameters. Note, unlike Promise.catch(),
-	  // this handlers is called immediately.
-	
-	  PromiseState.prototype["catch"] = function _catch(onRejected) {
-	    return this.then(undefined, onRejected);
-	  };
-	
-	  PromiseState.prototype._mapFlatMapValue = function _mapFlatMapValue(value) {
-	    if (value instanceof PromiseState) {
-	      return value;
-	    } else {
-	      return PromiseState.resolve(value, this.meta);
-	    }
-	  };
-	
-	  return PromiseState;
-	})();
-	
-	exports["default"] = PromiseState;
-	module.exports = exports["default"];
-
-/***/ },
-/* 317 */
-/***/ function(module, exports) {
-
-	/**
-	 * Copyright 2015, Yahoo! Inc.
-	 * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
-	 */
-	'use strict';
-	
-	var REACT_STATICS = {
-	    childContextTypes: true,
-	    contextTypes: true,
-	    defaultProps: true,
-	    displayName: true,
-	    getDefaultProps: true,
-	    mixins: true,
-	    propTypes: true,
-	    type: true
-	};
-	
-	var KNOWN_STATICS = {
-	    name: true,
-	    length: true,
-	    prototype: true,
-	    caller: true,
-	    arguments: true,
-	    arity: true
-	};
-	
-	module.exports = function hoistNonReactStatics(targetComponent, sourceComponent) {
-	    var keys = Object.getOwnPropertyNames(sourceComponent);
-	    for (var i=0; i<keys.length; ++i) {
-	        if (!REACT_STATICS[keys[i]] && !KNOWN_STATICS[keys[i]]) {
-	            targetComponent[keys[i]] = sourceComponent[keys[i]];
-	        }
-	    }
-	
-	    return targetComponent;
-	};
-
-
-/***/ },
-/* 318 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(77), RootInstanceProvider = __webpack_require__(85), ReactMount = __webpack_require__(87), React = __webpack_require__(139); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
