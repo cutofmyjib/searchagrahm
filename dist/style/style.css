@@ -24,6 +24,11 @@
   align-self: center;
 }
 
+.results-body {
+
+  margin: 48px;
+}
+
 .home {
   display: flex;
   flex-direction: column;
