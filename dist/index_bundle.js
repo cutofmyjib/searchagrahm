@@ -54,7 +54,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "fa1a925d8f0f2806264a"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "1353ce6d74618773a2fd"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -8056,15 +8056,11 @@
 	      return _react2.default.createElement(
 	        _reactRouter.Router,
 	        { history: _reactRouter.hashHistory },
+	        _react2.default.createElement(_reactRouter.Route, { path: '/', component: _home2.default }),
 	        _react2.default.createElement(
 	          _reactRouter.Route,
-	          { path: '/', component: App },
-	          _react2.default.createElement(_reactRouter.Route, { path: 'home', component: _home2.default }),
-	          _react2.default.createElement(
-	            _reactRouter.Route,
-	            { component: _wrapper2.default },
-	            _react2.default.createElement(_reactRouter.Route, { path: 'users', component: _users2.default })
-	          )
+	          { component: _wrapper2.default },
+	          _react2.default.createElement(_reactRouter.Route, { path: 'users', component: _users2.default })
 	        )
 	      );
 	    }
@@ -33297,9 +33293,9 @@
 	
 	var _reactDom = __webpack_require__(243);
 	
-	var _header = __webpack_require__(303);
+	var _user = __webpack_require__(309);
 	
-	var _header2 = _interopRequireDefault(_header);
+	var _user2 = _interopRequireDefault(_user);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -33321,10 +33317,20 @@
 	  _createClass(Users, [{
 	    key: 'render',
 	    value: function render() {
+	      var usersData = [{
+	        imgSrc: "/images/avatar2/large/kristy.png",
+	        userName: "Die_Antwoord",
+	        firstName: "Die",
+	        lastName: "Antwoord"
+	      }];
+	
+	      var userCards = usersData.map(function (data) {
+	        return _react2.default.createElement(_user2.default, data);
+	      });
 	      return _react2.default.createElement(
-	        'h3',
+	        'div',
 	        null,
-	        'users results here'
+	        userCards
 	      );
 	    }
 	  }]);
@@ -33335,6 +33341,82 @@
 	exports.default = Users;
 
 	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(304); if (makeExportsHot(module, __webpack_require__(139))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "users.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)(module)))
+
+/***/ },
+/* 309 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(77), RootInstanceProvider = __webpack_require__(85), ReactMount = __webpack_require__(87), React = __webpack_require__(139); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
+	
+	'use strict';
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(139);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactDom = __webpack_require__(243);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var User = function (_Component) {
+	  _inherits(User, _Component);
+	
+	  function User() {
+	    _classCallCheck(this, User);
+	
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(User).apply(this, arguments));
+	  }
+	
+	  _createClass(User, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        { 'class': 'ui card' },
+	        _react2.default.createElement(
+	          'div',
+	          { 'class': 'image' },
+	          _react2.default.createElement('img', { src: this.props.imgSrc })
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { 'class': 'content' },
+	          _react2.default.createElement(
+	            'a',
+	            { 'class': 'header' },
+	            this.props.userName
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { 'class': 'meta' },
+	            this.props.firstName,
+	            ' ',
+	            this.props.lastName
+	          )
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return User;
+	}(_react.Component);
+
+	exports.default = User;
+
+	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(304); if (makeExportsHot(module, __webpack_require__(139))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "user.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)(module)))
 
 /***/ }
