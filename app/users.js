@@ -3,22 +3,22 @@ import {render} from 'react-dom';
 import {connect} from 'react-refetch'
 import User from './user.js';
 
-class Users extends Component {
+export default class Users extends Component {
   render() {
-    // var usersData = [
-    //   {
-    //     imgSrc: "http://thefuturists.ca/wp-content/uploads/2010/10/DieAntwoordPoster1.jpg",
-    //     userName: "Die_Antwoord",
-    //     firstName: "Dee",
-    //     lastName: "Antwoord"
-    //   },
-    //   {
-    //     imgSrc: "https://s-media-cache-ak0.pinimg.com/736x/68/99/97/689997e5bcce1ac339738232f87a8855.jpg",
-    //     userName: "Grimez_Antwoord",
-    //     firstName: "Actually",
-    //     lastName: "Grimes"
-    //   }
-    //   ];
+    var usersData = [
+      {
+        imgSrc: "http://thefuturists.ca/wp-content/uploads/2010/10/DieAntwoordPoster1.jpg",
+        userName: "Die_Antwoord",
+        firstName: "Dee",
+        lastName: "Antwoord"
+      },
+      {
+        imgSrc: "https://s-media-cache-ak0.pinimg.com/736x/68/99/97/689997e5bcce1ac339738232f87a8855.jpg",
+        userName: "Grimez_Antwoord",
+        firstName: "Actually",
+        lastName: "Grimes"
+      }
+      ];
 
     var userCards = usersData.map(function(data){
         return <User {...data} />
@@ -32,7 +32,3 @@ class Users extends Component {
     );
   }
 }
-
-export default connect(props => ({
-  usersFetch: `/users/${props.userId}`
-}))(Profile)
