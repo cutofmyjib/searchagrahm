@@ -32,7 +32,7 @@ export default class Users extends Component {
 
     return (
       <div className="results-body">
-        <div className="ui four cards">
+        <div className="ui link cards">
           {userCards}
         </div>
       </div>
