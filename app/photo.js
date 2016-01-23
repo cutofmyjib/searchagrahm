@@ -6,7 +6,7 @@ export default class Photo extends Component {
     return (
       <div className="ui fluid card">
         <div className="image">
-          <img src={this.props.images.thumbnail.url} />
+          <img src={this.props.images.standard_resolution.url} />
         </div>
         <div className="content">
             <span className="description">{this.props.caption ? this.props.caption.text : ''}</span>
