@@ -6,19 +6,19 @@ import User from './user.js';
 export default class Users extends Component {
   constructor(props) {
     super(props);
-    this.state = { type: 'start' };
+    this.state = { status: 'start' };
   }
 
   getContent() {
-    this.setState({ type: 'loading' });
+    this.setState({ status: 'loading' });
 
     reqwest({
       url: 'https://api.instagram.com/v1/users/search?q=' + this.props.location.query.username + '&access_token=337924724.c2da448.945bb99df5c44b4e9ef5b69d6e0859ee',
       type: 'jsonp',
       method: 'get'
     })
-    .then(response => this.setState({ type: 'success', response }))
-    .fail(err => this.setState( { type: 'error' }));
+    .then(response => this.setState({ status: 'success', response }))
+    .fail(err => this.setState( { status: 'error' }));
   }
 
   componentDidMount() {
@@ -34,7 +34,7 @@ export default class Users extends Component {
 
   render() {
     var userCards = [];
-    if (this.state.type === 'success') {
+    if (this.state.status === 'success') {
       if (this.state.response.data.length < 1) {
         return (
           <div className="ui info message">
@@ -55,7 +55,7 @@ export default class Users extends Component {
           </div>
         </div>
       );
-    } else if (this.state.type === 'error') {
+    } else if (this.state.status === 'error') {
       return (
         <div className="ui error message">
           <div className="header">
