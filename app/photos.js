@@ -6,7 +6,7 @@ import Photo from './photo.js';
 export default class Photos extends Component {
   constructor(props) {
     super(props);
-    this.state = { status: 'start'}
+    this.state = { status: 'start'};
   }
 
   componentDidMount() {
@@ -24,27 +24,24 @@ export default class Photos extends Component {
   render() {
     //if promise
     var photoCards = [];
+    var message = '';
     if (this.state.status === 'success') {
-      console.log(this.state.response.data);
       var photoArray = this.state.response.data;
+      message = '10 current photos from ' + this.state.response.data[0].user.username;
       photoCards = photoArray.map(function(imgData){
         return <Photo {...imgData} />
       });
-      return (
-        <div className="results-body">
-          <h3 className="ui header">10 current photos from {this.state.response.data[0].user.username}</h3>
-          <div className="ui four cards">
-            {photoCards}
-          </div>
-        </div>
-      );
     } else {
-      return (
-        <div className="results-body">
-          <h3 className="ui header">{this.state.status}</h3>
-        </div>
-      );
+      message = this.state.status;
     }
+    return (
+      <div className="results-body">
+        <h3 className="ui header">{message}</h3>
+        <div className="ui four cards">
+          {photoCards}
+        </div>
+      </div>
+    );
   }
 
 }
