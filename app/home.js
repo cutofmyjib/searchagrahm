@@ -9,13 +9,11 @@ export default class Home extends Component {
   }
 
   redirectSearch(event) {
-    if (event.keyCode === 13) {
-      hashHistory.push('/users?username=' + this.state.username)
+    var queryString = event.target.value;
+    queryString = queryString.replace(/\s/g, '');
+    if (event.keyCode === 13 && queryString) {
+      hashHistory.push('/users?username=' + queryString)
     }
-  }
-
-  captureString(event) {
-    this.setState({ username: event.target.value });
   }
 
   render() {
@@ -23,7 +21,7 @@ export default class Home extends Component {
       <div className="home">
         <div className="ui search">
           <div className="ui icon input">
-            <input className="prompt" type="text" onKeyDown={this.redirectSearch.bind(this)} onChange={this.captureString.bind(this)} placeholder="socialprintstudio..." />
+            <input className="prompt" type="text" onKeyDown={this.redirectSearch.bind(this)} placeholder="socialprintstudio..." />
             <i className="search icon"></i>
           </div>
         </div>
