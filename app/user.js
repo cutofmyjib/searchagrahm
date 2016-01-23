@@ -4,9 +4,11 @@ import {Link} from 'react-router'
 
 export default class User extends Component {
   render() {
+    const userPath = "/user/" + this.props.id;
+
     return (
       <div className="red card">
-        <Link to="user1" className="image">
+        <Link to={userPath}  className="image">
           <img src={this.props.profile_picture} />
         </Link>
         <div className="content">

@@ -13,7 +13,7 @@ export default class Users extends Component {
     this.setState({ type: 'loading' });
 
     reqwest({
-      url: 'https://api.instagram.com/v1/users/search?q=dana&access_token=337924724.c2da448.945bb99df5c44b4e9ef5b69d6e0859ee',
+      url: 'https://api.instagram.com/v1/users/search?q=' + this.props.location.query.username + '&access_token=337924724.c2da448.945bb99df5c44b4e9ef5b69d6e0859ee',
       type: 'jsonp',
       method: 'get'
     })
