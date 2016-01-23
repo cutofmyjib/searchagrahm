@@ -25,6 +25,7 @@ export default class Users extends Component {
     this.getContent();
   }
 
+  //header component has input field, need to call getContent function if there's a change
   componentDidUpdate(prevProps) {
     if (this.props.location.query.username !== prevProps.location.query.username) {
       this.getContent();
