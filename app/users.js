@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {render} from 'react-dom';
 import reqwest from 'reqwest';
 import User from './user.js';
+import {SearchError, SearchLoading} from './message.js';
 
 export default class Users extends Component {
   constructor(props) {
@@ -37,11 +38,7 @@ export default class Users extends Component {
     if (this.state.status === 'success') {
       if (this.state.response.data.length < 1) {
         return (
-          <div className="ui info message">
-            <div className="header">
-              Sorry, couldn&apos;t find a username &apos;{this.props.location.query.username}&apos;.
-            </div>
-          </div>
+          <SearchEmpty />
         );
       }
       userCards = this.state.response.data.map(function(data){
@@ -57,23 +54,11 @@ export default class Users extends Component {
       );
     } else if (this.state.status === 'error') {
       return (
-        <div className="ui error message">
-          <div className="header">
-            Oops something happened!
-          </div>
-        </div>
+        <SearchError />
       );
     } else {
       return (
-        <div className="ui icon message">
-          <i className="notched circle loading icon"></i>
-          <div className="content">
-            <div className="header">
-              Just one second
-            </div>
-            <p>Fetching content for you.</p>
-          </div>
-        </div>
+        <SearchLoading />
       );
     }
 
