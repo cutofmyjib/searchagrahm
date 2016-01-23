@@ -13,10 +13,21 @@
 }
 
 .site-header-heading {
+  font-family: 'Berkshire Swash', cursive;
   margin: 0
   display: flex;
   align-self: center;
+  color: white;
+}
+
+.site-header-heading-link {
   color: #f7f7f7;
+  cursor: pointer;
+}
+
+.site-header-heading-link:hover {
+  color: white;
+  opacity: .5;
 }
 
 .site-header-center {
