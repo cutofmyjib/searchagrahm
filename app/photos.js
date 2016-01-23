@@ -25,12 +25,14 @@ export default class Photos extends Component {
     //if promise
     var photoCards = [];
     if (this.state.status === 'success') {
+      console.log(this.state.response.data);
       var photoArray = this.state.response.data;
       photoCards = photoArray.map(function(imgData){
         return <Photo {...imgData} />
       });
       return (
         <div className="results-body">
+          <h3 className="ui header">10 current photos from {this.state.response.data[0].user.username}</h3>
           <div className="ui four cards">
             {photoCards}
           </div>
@@ -39,9 +41,7 @@ export default class Photos extends Component {
     } else {
       return (
         <div className="results-body">
-          <div className="ui four cards">
-            {JSON.stringify(this.state.status)}
-          </div>
+          <h3 className="ui header">{this.state.status}</h3>
         </div>
       );
     }
