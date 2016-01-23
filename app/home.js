@@ -5,7 +5,7 @@ import { hashHistory, Router, Route, Link } from 'react-router'
 export default class Home extends Component {
   constructor(props) {
     super(props);
-    this.state = { media: '' };
+    this.state = {};
   }
 
   redirectSearch(event) {
