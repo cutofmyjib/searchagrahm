@@ -18,14 +18,14 @@ export class SearchLoading extends Component {
   render() {
     return (
       <div className="ui icon message">
-          <i className="notched circle loading icon"></i>
-          <div className="content">
-            <div className="header">
-              Just one second
-            </div>
-            <p>Fetching content for you.</p>
+        <i className="notched circle loading icon"></i>
+        <div className="content">
+          <div className="header">
+            Just one second
           </div>
+          <p>Fetching content for you.</p>
         </div>
+      </div>
     );
   }
 }
