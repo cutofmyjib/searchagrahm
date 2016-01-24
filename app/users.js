@@ -38,7 +38,11 @@ export default class Users extends Component {
     if (this.state.status === 'success') {
       if (this.state.response.data.length < 1) {
         return (
-          <SearchEmpty />
+          <div className="ui info message">
+            <div className="header">
+              Sorry, couldn&apos;t find a username &apos;{this.props.location.query.username}&apos;.
+            </div>
+          </div>
         );
       }
       userCards = this.state.response.data.map(function(data){

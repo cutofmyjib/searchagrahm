@@ -29,15 +29,3 @@ export class SearchLoading extends Component {
     );
   }
 }
-
-export class SearchEmpty extends Component {
-  render() {
-    return (
-      <div className="ui info message">
-        <div className="header">
-          Sorry, couldn&apos;t find a username &apos;{this.props.location.query.username}&apos;.
-        </div>
-      </div>
-    );
-  }
-}
