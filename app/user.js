@@ -13,7 +13,7 @@ export default class User extends Component {
         </Link>
         <div className="content">
           <div className="header">{this.props.username}</div>
-          <div className="meta">{this.props.full_name} {this.props.lastName}</div>
+          <div className="meta">{this.props.full_name}</div>
         </div>
       </div>
     );
